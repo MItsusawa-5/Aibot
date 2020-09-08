@@ -42,6 +42,11 @@ def callback():
 def handle_message(event):
     if event.message.text == "世話かけるな":
         reply_message = "いいよ"
+    elif event.message.text == "勉強開始":
+        reply_message = "計測を開始しました"
+        start = 今の時間
+    elif event.message.text == "勉強終了":
+        reply_message = "ただいまの勉強時間は０時間０分１０秒です。お疲れ様でした！"
     else:
         reply_message = f"あなたは{event.message.text}と言いましたね？"
     
