@@ -37,16 +37,30 @@ def callback():
 
     return 'OK'
 
-
+from time import time
+users = {}
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    userId = event.source.user_id
     if event.message.text == "世話かけるな":
         reply_message = "いいよ"
     elif event.message.text == "勉強開始":
         reply_message = "計測を開始しました"
-        start = 今の時間
+        if not userId in users:
+            users[userId] = {}
+            users[userId]["total"] = 0
+        users[userId]["start"] = time()
     elif event.message.text == "勉強終了":
-        reply_message = "ただいまの勉強時間は０時間０分１０秒です。お疲れ様でした！"
+        end = time()
+        difference = int(end - users[userId]["start"])
+        users[userId]["total"] += difference
+        hour = difference // 3600
+        minute = (difference % 3600) // 60
+        second = difference % 60
+        total_hour = users[userId]["total"] // 3600
+        total_minute = (users[userId]["total"] % 3600) // 60
+        total_second = users[userId]["total"] % 60
+        reply_message = f"ただいまの勉強時間は{hour}時間{minute}分{second}秒です。お疲れ様でした！本日は合計で{total_hour}時間{total_minute}分{total_second}秒勉強しています。"
     else:
         reply_message = f"あなたは{event.message.text}と言いましたね？"
     
